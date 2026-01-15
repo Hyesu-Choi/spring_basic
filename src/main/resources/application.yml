@@ -1,5 +1,4 @@
 # spring에서 application.properties 또는 application.yml은 환경설정파일
 # yml형식은 계층구조를 가진 가독성 좋은 형식
 server:
-  port: 8081
-
+  port: 8081  # default port는 8080인데 8081로 커스텀한거임.

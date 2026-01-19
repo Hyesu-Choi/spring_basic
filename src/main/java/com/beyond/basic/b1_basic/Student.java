@@ -16,6 +16,9 @@ public class Student {
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
+//    내부에 static 반드시 필요
+//    객체마다 class가 붙는게 말이 안된다.
+//    만약에 static 을 뺴고 싶다면 Student 밖에 선언해야한다.
     public static class Score {
         private String subject;
         private int point;

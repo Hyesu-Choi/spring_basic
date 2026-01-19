@@ -2,3 +2,11 @@
 # yml형식은 계층구조를 가진 가독성 좋은 형식
 server:
   port: 8081  # default port는 8080인데 8081로 커스텀한거임.
+spring:
+#  아래는 jdbc의 기본 db 연결 설정. jdbc 뿐만 아니라, mybatis, jpa 등 spring의 대부분의 db관리 기술에서 사용
+#  스키마는 사전 생성 필요, 테이블의 경우 jdbc/mybatis는 사전생성 필요.
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/board
+    username: root
+    password: test1234

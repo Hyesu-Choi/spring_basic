@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 public class AuthorJdbcRepository {
-    //    Datasource는 jdbc의 DB 관리 객체 . 의존성 주입
+    //    Datasource는 jdbc의 DB 관리 객체 . 의존성 주입(싱글톤)
     @Autowired
     private final DataSource dataSource;
     public AuthorJdbcRepository(DataSource dataSource) {
@@ -42,13 +42,13 @@ public class AuthorJdbcRepository {
         }
     }
 
-    public Optional<Author> findById(Long inputId) {
+    public Optional<Author> findByEmail(String inputEmail) {
         Author author = null;
         try {
             Connection connection = dataSource.getConnection();
-            String sql = "select * from author where id = ?";
+            String sql = "select * from author where email = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setLong(1, inputId);
+            ps.setString(1, inputEmail);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Long id = rs.getLong("id");
@@ -56,6 +56,29 @@ public class AuthorJdbcRepository {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 author = Author.builder().id(id).name(name).email(email).password(password).build();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return Optional.ofNullable(author);
+    }
+
+
+    public Optional<Author> findById(Long inputId) {
+        Author author = null;
+        try {
+            Connection connection = dataSource.getConnection();
+            String sql = "select * from author where id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1, inputId);
+            ResultSet rs = ps.executeQuery();  // 조회결과가 resultset에 담김
+            if (rs.next()) {
+                Long id = rs.getLong("id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                author = Author.builder().id(id).name(name).email(email).password(password).build(); // 객체 직접 조립
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -83,6 +106,18 @@ public class AuthorJdbcRepository {
             throw new RuntimeException(e);
         }
         return authorList;
+    }
+    public void delete(Long id) {
+        try {
+            Connection connection = dataSource.getConnection();
+            String sql = "delete from author where id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1, id);
+//            데이터 삭제
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

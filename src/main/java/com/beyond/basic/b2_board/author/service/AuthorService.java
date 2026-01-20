@@ -28,6 +28,7 @@ public class AuthorService {
 //    장점2) 다형성 구현 가능(interface 사용가능)?좀 더 공부해보기
 //    장점3) 순환참조 방지(컴파일타임에 에러 check)
     private final AuthorJdbcRepository authorMemoryRepository;  //  이 자리에 인터페이스 사용 가능
+
     //    생성자가 하나밖에 없을때에는 @Autowired 생략 가능.
     @Autowired  // 그냥 무조건 붕이는게 좋음.
     public AuthorService(AuthorJdbcRepository authorMemoryRepository) { // 매개변수로 주입의 객체 대상을 정확히 지정해서 넣어줌.
@@ -59,7 +60,13 @@ public class AuthorService {
 //        방법2. toEntity, fromEntity 패턴을 통한 객체 조립
 //        객체조립이라는 반복적인 작업을 별도의 코드로 떼어내 공통화하는 작업. 보통은 dto에 떼냄.
         Author author = dto.toEntity();
+        //        데이터 조회 후 이메일 중복이면 예외처리
+        if(authorMemoryRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
         authorMemoryRepository.save(author);
+
+
 
     }
 
@@ -90,7 +97,13 @@ public class AuthorService {
 //        return authorListDtos;
 
         return authorMemoryRepository.findAll().stream().map(a -> AuthorListDto.fromEntity(a)).collect(Collectors.toList());
+    }
 
+    public void delete(Long id) {
+//        데이터 조회 후 없다면 예외처리
+        Author author = authorMemoryRepository.findById(id).orElseThrow(() -> new NoSuchElementException("entity is not found"));
+//        삭제작업
+        authorMemoryRepository.delete(id);
     }
 
 }

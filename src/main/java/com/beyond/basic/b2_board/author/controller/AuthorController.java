@@ -21,6 +21,7 @@ public class AuthorController {
 
     //    service 의존성 주입.. 의존성 주입 두번 하면 안됨..스프링에서 해당 빈 못 찾아옴.
     private final AuthorService authorService;
+
     @Autowired
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
@@ -40,6 +41,8 @@ public class AuthorController {
 //            CommonErrorDto errorDto = CommonErrorDto.builder().status_code(400).error_message(e.getMessage()).build();
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
 //        }
+
+//        예외처리 공통 핸들로 만들어서, 성공 응답은 controller에서, 에러 응답은 CommonExceptionHandler에서 처리
         authorService.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("OK");
 
@@ -52,18 +55,6 @@ public class AuthorController {
         return dtoList;
     }
 
-
-//    아래와 같이 http 응답 body를 분기처리한다 하더라도 상태코드는 200으로 고정.
-//    @GetMapping("/{id}")
-//    public Object findById(@PathVariable Long id) {
-//        try {
-//            AuthorDetailDto dto = authorService.findById(id);
-//            return dto;
-//        } catch (NoSuchElementException e) {
-//            e.printStackTrace();
-//            return CommonErrorDto.builder().status_code(404).error_message(e.getMessage()).build();
-//        }
-//    }
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
@@ -78,6 +69,16 @@ public class AuthorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dto);
         }
     }
+    //    아래와 같이 http 응답 body를 분기처리한다 하더라도 헤더의 상태코드는 200으로 고정되고 body만 바뀜.
+//    public Object findById(@PathVariable Long id) {
+//        try {
+//            AuthorDetailDto dto = authorService.findById(id);
+//            return dto;
+//        } catch (NoSuchElementException e) {
+//            e.printStackTrace();
+//            return CommonErrorDto.builder().status_code(404).error_message(e.getMessage()).build();
+//        }
+//    }
 
     //    회원탈퇴
     @DeleteMapping("/{id}")
@@ -85,6 +86,5 @@ public class AuthorController {
         authorService.delete(id);
         return "ok";
     }
-
 
 }

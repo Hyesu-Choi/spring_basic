@@ -15,6 +15,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> illegal(IllegalArgumentException e) { // 에러 주입
+        e.printStackTrace();
         CommonErrorDto dto = CommonErrorDto.builder()
                 .status_code(400).error_message(e.getMessage()).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
@@ -23,6 +24,7 @@ public class CommonExceptionHandler {
     //    valid 에러 캐치
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> notValidException(MethodArgumentNotValidException e) {
+        e.printStackTrace();
         CommonErrorDto dto = CommonErrorDto.builder()
                 .status_code(400)
                 .error_message(e.getFieldError().getDefaultMessage())
@@ -32,6 +34,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<?> noSuchElement(NoSuchElementException e) {
+        e.printStackTrace();
         CommonErrorDto dto = CommonErrorDto.builder()
                 .status_code(404).error_message(e.getMessage()).build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dto);
@@ -40,6 +43,7 @@ public class CommonExceptionHandler {
 //    메서드로 분기 처리 안한 나머지 에러들은 에러의 조상 클래스 exception으로 처리한댜
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> exception(Exception e) {
+        e.printStackTrace();
         CommonErrorDto dto = CommonErrorDto.builder()
                 .status_code(500).error_message(e.getMessage()).build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(dto);

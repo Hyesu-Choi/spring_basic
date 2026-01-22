@@ -32,6 +32,7 @@ public class CommonExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
     }
 
+
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<?> noSuchElement(NoSuchElementException e) {
         e.printStackTrace();

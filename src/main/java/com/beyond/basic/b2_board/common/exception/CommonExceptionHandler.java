@@ -1,5 +1,6 @@
-package com.beyond.basic.b2_board.common;
+package com.beyond.basic.b2_board.common.exception;
 
+import com.beyond.basic.b2_board.common.dtos.CommonErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

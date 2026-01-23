@@ -39,8 +39,14 @@ dependencies {
 //    값 검증을 위한 의존성 : validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-
-
+    //	로그인을 위한 security 의존성
+//    security 의존성을 적용하자마자, 모든 api 요청에 대해 로그인을 요구(Authentication객체의 생성여부 확인)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+//	jwt토큰 관련 라이브러리 추가 : 토큰 쉽게 만들고, 쉽게 파싱하기 위함.
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+// 	토큰의 JSON 인코딩/디코딩, 직렬화/파싱 에 필요
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 
 //    아래는 테스트코드 작성를 위한 의존성

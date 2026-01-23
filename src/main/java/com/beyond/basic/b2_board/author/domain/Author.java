@@ -1,13 +1,10 @@
 package com.beyond.basic.b2_board.author.domain;
 
-import com.beyond.basic.b2_board.common.BaseTimeEntity;
+import com.beyond.basic.b2_board.common.domain.BaseTimeEntity;
 import com.beyond.basic.b2_board.post.domain.Post;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +38,8 @@ public class Author extends BaseTimeEntity {
     private Role role = Role.USER;
 
     //    일반적으로 OneToMany는 선택사항. ManyToOne은 필수사항. many쪽 데이터 조회해 올 일 없으면 굳이 설정 안해도됨.
-//    mappedBy : ManyToOne 쪽의 변수명을 문자열로 지정. -> 조회해야할 컬럼을 명시. 주인
-//    연관관계(fk)의 주인 설정 -> 연관관계의 주인은 author 변수를 가지고 있는 Post에 있음을 명시
+//    mappedBy : ManyToOne 쪽의 필드명을 문자열로 지정. -> 조회해야할 컬럼을 명시. 주인
+//    연관관계(fk)의 주인 설정 -> 연관관계의 주인은 author 변수를 가지고 있는 Post에 있음을 명시. fk설정을 어디서 하는지.
 //    orphanRemoval : 자식의 자식까지 연쇄적으로 삭제해야할 경우 모든 부모에 orphanRemoval=true 옵션 추가. // all=persist+remove
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

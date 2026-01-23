@@ -20,4 +20,6 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
 //    복잡한 쿼리 : 대표적으로 조인. 이건 raw쿼리 -> 객체지향형 raw쿼리 : jpql
 //    findByNameAndAge, findByNameOrAge, findByIdAndAge ..
 
+
+
 }

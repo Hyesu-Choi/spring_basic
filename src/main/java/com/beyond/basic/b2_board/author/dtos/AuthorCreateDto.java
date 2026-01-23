@@ -26,11 +26,11 @@ public class AuthorCreateDto {
     private String password;
 
     //    dto -> entity
-    public Author toEntity() {
+    public Author toEntity(String encodedPassword) {
         return Author.builder()
                 .name(this.name)
                 .email(this.email)
-                .password(this.password)
+                .password(encodedPassword)
                 .build();
     }
 

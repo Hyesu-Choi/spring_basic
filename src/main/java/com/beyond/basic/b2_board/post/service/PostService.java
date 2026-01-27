@@ -9,6 +9,8 @@ import com.beyond.basic.b2_board.author.repository.AuthorRepository;
 import com.beyond.basic.b2_board.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +38,6 @@ public class PostService {
 //        등록시 입력한 이메일과 똑같은 author정보를 객체에 담아줌
 //        Author author = authorRepository.findByEmail(dto.getAuthorEmail()).orElseThrow(() -> new EntityNotFoundException("Author not found"));
         String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        System.out.println(email);
         Author author = authorRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Author not found"));
         postRepository.save(dto.toEntity(author));
     }
@@ -53,16 +54,14 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostListDto> findAll() { // 스트림으로 바꿔도됨
+    public Page<PostListDto> findAll(Pageable pageable) {
 //        List<Post> postList = postRepository.findAllByDelYn("No");
 //        List<Post> postList = postRepository.findAllInnerJoin();
-        List<Post> postList = postRepository.findAllFetchInnerJoin();  //fetch조인 호출
-        List<PostListDto> postListDtoList = new ArrayList<>();
-        for (Post p : postList) {
-            PostListDto dto = PostListDto.fromEntity(p);
-            postListDtoList.add(dto);
-        }
-        return postListDtoList;
+//        List<Post> postList = postRepository.findAllFetchInnerJoin();  //fetch조인 호출
+        Page<Post> postList = postRepository.findAll(pageable);
+
+//        Page객체 안에 Entity -> Dto로 쉽게 변환할 수 있는 편의 제공
+        return postList.map(p->PostListDto.fromEntity(p));
     }
 
     public void delete(Long id) {

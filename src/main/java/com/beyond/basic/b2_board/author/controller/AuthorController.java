@@ -103,7 +103,6 @@ public class AuthorController {
 //    @AuthenticationPrincipal 객체안에서 principal 꺼낼 수 있음.
     public ResponseEntity<?> myinfo(@AuthenticationPrincipal String principal) {
 //        public ResponseEntity<?> myinfo() {
-        System.out.println(principal);
         AuthorDetailDto dto = authorService.myInfo(principal);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
 

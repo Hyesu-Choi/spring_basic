@@ -36,7 +36,7 @@ public class JwtTokenFilter extends GenericFilter {
             }
 //        Bearer문자열을 제거한 후에 jwt token 만을 검증
             String token = bearerToken.substring(7);
-            System.out.println(token);
+//            System.out.println(token);
 
 //        token 검증 및 claims 추출 (토큰->디코딩->header,payload,signature+key 토큰 디코딩. 인코딩, 기존토큰 비교까지 다 함)
             Claims claims = Jwts.parserBuilder()

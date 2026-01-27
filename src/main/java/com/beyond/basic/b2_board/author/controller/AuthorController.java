@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class AuthorController {
     // 로그인
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public String authorLogin(@RequestBody AuthorLoginDto dto){
+    public String authorLogin(@RequestBody AuthorLoginDto dto) {
         Author author = authorService.login(dto);
 //        토큰 생성 및 리턴
         String token = jwtTokenProvider.createToken(author);
@@ -72,6 +73,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
             AuthorDetailDto dto = authorService.findById(id);
@@ -96,6 +98,17 @@ public class AuthorController {
 //        }
 //    }
 
+    //    내 정보 조회
+    @GetMapping("/myinfo")
+//    @AuthenticationPrincipal 객체안에서 principal 꺼낼 수 있음.
+    public ResponseEntity<?> myinfo(@AuthenticationPrincipal String principal) {
+//        public ResponseEntity<?> myinfo() {
+        System.out.println(principal);
+        AuthorDetailDto dto = authorService.myInfo(principal);
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+
+    }
+
     //    회원탈퇴
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
@@ -103,7 +116,7 @@ public class AuthorController {
         return "ok";
     }
 
-//    비밀번호 수정
+    //    비밀번호 수정
     @PatchMapping("/update/password")
     public void updatePw(@RequestBody AuthorUpdatePwDto dto) {
         authorService.updatePassword(dto);

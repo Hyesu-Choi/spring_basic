@@ -46,10 +46,8 @@ public class Author extends BaseTimeEntity {
      private List<Post> postList = new ArrayList<>(); // persist. 초기화 필요
 //    List<Post> postList;  //remove
 
-    @OneToOne(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Address adress;
-
-
+//    @OneToOne(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Address adress;
 
     public void updatePassword(String password) {
         this.password = password;

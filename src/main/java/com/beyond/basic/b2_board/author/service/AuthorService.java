@@ -7,6 +7,7 @@ import com.beyond.basic.b2_board.post.domain.Post;
 import com.beyond.basic.b2_board.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,13 +97,10 @@ public class AuthorService {
                 check = false;
             }
         }
-
         if (!check) {
             throw new IllegalArgumentException("email 또는 비밀번호가 일치하지 않습니다.");
         }
         return optAuthor.get();
-
-
     }
 
     //    회원상세조회
@@ -119,6 +117,17 @@ public class AuthorService {
 
         return dto;
     }
+
+    @Transactional(readOnly = true)
+    public AuthorDetailDto myInfo(String principal) {
+//        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();  // 외우기. 이런식으로 토큰에 저장된 이메일 불러와도 되고, controller에서 @AuthenticationPrincipal 어노테이션사용해서 subject값 꺼내와서 이메일찾기 파라미터로 넣어도됨.
+        Optional<Author> optAuthor = authorRepository.findByEmail(principal);
+        Author author = optAuthor.orElseThrow(() -> new NoSuchElementException("entity is not found"));
+        AuthorDetailDto dto = AuthorDetailDto.fromEntity(author);
+        return dto;
+    }
+
+
 
     //    회원정보 전체 조회 로직
     @Transactional(readOnly = true)

@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//토큰 검증 후 Authentication 객체 생성
+//토큰 검증 후 Authentication 객체 생성. AT토큰만 검증
 @Component
 public class JwtTokenFilter extends GenericFilter {
     @Value("${jwt.secretKey}")
@@ -38,7 +38,7 @@ public class JwtTokenFilter extends GenericFilter {
             String token = bearerToken.substring(7);
             System.out.println(token);
 
-//        token 검증 및 claims 추출
+//        token 검증 및 claims 추출 (토큰->디코딩->header,payload,signature+key 토큰 디코딩. 인코딩, 기존토큰 비교까지 다 함)
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(st_secret_key)
                     .build()
@@ -48,7 +48,7 @@ public class JwtTokenFilter extends GenericFilter {
 //        claims를 기반으로 Authentication 객체 생성
 //        권한의 경우 다수의 권한을 가질 수 잇으므로 일반적으로 List로 설계
             List<GrantedAuthority> authorities = new ArrayList<>();
-//        권한을 세팅할떄 권한은 ROLE_ 라는 키워드를 붙임으로서 추후 권한체크 어노테이션 사용 가능.
+//        권한을 세팅할떄 권한은 ROLE_ 라는 키워드를 붙임으로서 추후 권한체크 어노테이션(@PreAuthorize) 사용 가능.
             authorities.add(new SimpleGrantedAuthority("ROLE_" + claims.get("role")));  // 권한체크 어노테이션 사용 위해 ROLE_ +함
 //        1)principal : email 2)credentials : 토큰 3)authorities : 권한묶음
             Authentication authentication = new UsernamePasswordAuthenticationToken(claims.getSubject(), "", authorities);

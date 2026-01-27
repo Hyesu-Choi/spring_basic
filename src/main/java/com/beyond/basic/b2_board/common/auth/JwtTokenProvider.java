@@ -32,8 +32,9 @@ public class JwtTokenProvider {
         secret_key = new SecretKeySpec(Base64.getDecoder().decode(st_secret_key), SignatureAlgorithm.HS512.getJcaName());  // 디코딩+암호화
     }
 
+//    토큰 생성
     public String createToken(Author author) {
-        // sub : abc@naver.com 형태
+        // sub : abc@naver.com 형태. 주된키값 setSubject로 넣기.
         Claims claims = Jwts.claims().setSubject(author.getEmail());
 //        주된키값을 제외한 나머지 정보는 put을 사용하여 key:value 로 세팅
         claims.put("role", author.getRole().toString());  // role enum이라서 toString으로 명시적으로 바뀜

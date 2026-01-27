@@ -54,7 +54,9 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostListDto> findAll() { // 스트림으로 바꿔도됨
-        List<Post> postList = postRepository.findAllByDelYn("No");
+//        List<Post> postList = postRepository.findAllByDelYn("No");
+//        List<Post> postList = postRepository.findAllInnerJoin();
+        List<Post> postList = postRepository.findAllFetchInnerJoin();  //fetch조인 호출
         List<PostListDto> postListDtoList = new ArrayList<>();
         for (Post p : postList) {
             PostListDto dto = PostListDto.fromEntity(p);

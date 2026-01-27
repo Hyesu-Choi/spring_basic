@@ -16,7 +16,7 @@ public class PostCreateDto {
     private String title;
     private String contents;
     private String category;
-    private String authorEmail;
+//    private String authorEmail;
 
 //    post 등록시 db 맞는 엔티티로 넣기 위해 재조립
     public Post toEntity(Author author) {

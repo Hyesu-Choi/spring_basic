@@ -9,6 +9,7 @@ import com.beyond.basic.b2_board.author.repository.AuthorRepository;
 import com.beyond.basic.b2_board.post.repository.PostRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class PostService {
-//    author객체도 필요해서 의존성 주입 추가 해줌.
+    //    author객체도 필요해서 의존성 주입 추가 해줌.
     private final PostRepository postRepository;
     private final AuthorRepository authorRepository;
 
@@ -33,7 +34,10 @@ public class PostService {
 
     public void save(PostCreateDto dto) {
 //        등록시 입력한 이메일과 똑같은 author정보를 객체에 담아줌
-        Author author = authorRepository.findByEmail(dto.getAuthorEmail()).orElseThrow(() -> new EntityNotFoundException("Author not found"));
+//        Author author = authorRepository.findByEmail(dto.getAuthorEmail()).orElseThrow(() -> new EntityNotFoundException("Author not found"));
+        String email = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        System.out.println(email);
+        Author author = authorRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Author not found"));
         postRepository.save(dto.toEntity(author));
     }
 
@@ -50,9 +54,9 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostListDto> findAll() { // 스트림으로 바꿔도됨
-        List<Post> postList =  postRepository.findAllByDelYn("No");
+        List<Post> postList = postRepository.findAllByDelYn("No");
         List<PostListDto> postListDtoList = new ArrayList<>();
-        for(Post p : postList) {
+        for (Post p : postList) {
             PostListDto dto = PostListDto.fromEntity(p);
             postListDtoList.add(dto);
         }
@@ -65,7 +69,4 @@ public class PostService {
         post.deletePost();
     }
 
-//    public Long findAllByAuthorId(Long authorId) {
-//        return (long) postRepository.findAllByAuthorId(authorId).size();
-//    }
 }

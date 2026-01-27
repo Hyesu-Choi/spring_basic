@@ -3,6 +3,7 @@ package com.beyond.basic.b2_board.common.exception;
 import com.beyond.basic.b2_board.common.dtos.CommonErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -42,7 +43,16 @@ public class CommonExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dto);
     }
 
-//    메서드로 분기 처리 안한 나머지 에러들은 에러의 조상 클래스 exception으로 처리한댜
+//    403에러 처리
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<?> authorizationDeniedException(AuthorizationDeniedException e) {
+        e.printStackTrace();
+        CommonErrorDto dto = CommonErrorDto.builder()
+                .status_code(403).error_message(e.getMessage()).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(dto);
+    }
+
+    //    메서드로 분기 처리 안한 나머지 에러들은 에러의 조상 클래스 exception으로 처리한댜
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> exception(Exception e) {
         e.printStackTrace();

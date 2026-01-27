@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,6 +63,9 @@ public class AuthorController {
 
     //    회원목록조회
     @GetMapping("/list")
+//    PreAuthorize : Authentcation 객체 안의 권한정보를 확인하는 어노테이션
+//    2개 이상의 Role을 허용하는 경우 :  "hasRole('ADMIN') or hasRole('SELLER')"
+    @PreAuthorize("hasRole('ADMIN')")  // ROLE_ 붙어있는지 이 어노테이션이 확인함. 토큰만들때 ROLE_ 붙임. 어드민 권한 있는 사람만 조회 가능함.
     public List<AuthorListDto> findAll() {
         List<AuthorListDto> dtoList = authorService.findAll();
         return dtoList;

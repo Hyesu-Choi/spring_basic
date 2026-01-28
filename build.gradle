@@ -47,6 +47,8 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 // 	토큰의 JSON 인코딩/디코딩, 직렬화/파싱 에 필요
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    //    batch의존성추가
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
 
 
 //    아래는 테스트코드 작성를 위한 의존성

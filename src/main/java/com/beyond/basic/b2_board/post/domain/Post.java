@@ -5,6 +5,8 @@ import com.beyond.basic.b2_board.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 //-게시글 : id, title(not null), contents(3000자이하), category, authorEmail(not null), delYn(String)-fromEntity, toEntity 활용
 @AllArgsConstructor
@@ -34,7 +36,13 @@ public class Post extends BaseTimeEntity {
 
 //    delYN default 추가하기 위한 옵션
     @Builder.Default  // 빌더 어노테이션 붕어있어야 사용 가능.
-    private String delYn = "No";
+    private String delYn = "N";
+
+    @Builder.Default
+    private String appointment = "N";
+    @Builder.Default
+    private LocalDateTime appointmentTime = LocalDateTime.now();
+
 
 
     public void updateDelYn(String delYn) {
@@ -42,6 +50,10 @@ public class Post extends BaseTimeEntity {
     }
 
     public void deletePost(){
-        this.delYn = "Yes";
+        this.delYn = "Y";
+    }
+//    영속성 컨텍스트에 변경사항 올리고 정상완료되면 자동 save해줌.
+    public void updateAppointment(String appointment) {
+        this.appointment = appointment;
     }
 }

@@ -3,7 +3,9 @@ package com.beyond.basic.b2_board.post.controller;
 import com.beyond.basic.b2_board.post.dtos.PostCreateDto;
 import com.beyond.basic.b2_board.post.dtos.PostDetailDto;
 import com.beyond.basic.b2_board.post.dtos.PostListDto;
+import com.beyond.basic.b2_board.post.dtos.PostSearchDto;
 import com.beyond.basic.b2_board.post.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 public class PostController {
     private final PostService postService;
@@ -35,8 +38,11 @@ public class PostController {
 
     @GetMapping("/posts")
 //    페이징 처리를 위한 데이터 요청 형식 : localhost:8080/posts?page=3&size=3&sort=title,asc
-    public Page<PostListDto> findAll(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {  // requestParam이랑 똑같이 동작함
-        return postService.findAll(pageable);
+//    검색 + 페이징 처리를 위한 데이터 요청 형식 : localhost:8080/posts?page=3&size=3&sort=title,asc&title=hello&category=경제
+    public Page<PostListDto> findAll(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, @ModelAttribute PostSearchDto searchDto) {  // requestParam, modelAttribute 기능.
+        log.info("dto : {}", searchDto);
+        return postService.findAll(pageable, searchDto);
+
     }
 
     @DeleteMapping("/post/{id}")

@@ -35,7 +35,7 @@ public class PostScheduler {
 //    0 0 * * * * : 매월 매일 매시간 0분 0초에 의미 : 1시간에 1번 실행.
 //    0 0 11 * * * : 매월 매일 11시 0분 0초에 의미 : 매일 11시에 실행.
 //    0 0/1 * * * * : 매월 매일 매시간 1분 마다의 의미 : 1분에 1번 실행
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 11 * * *")
     public void postSchedule() {
         log.info("==== 스케줄러 시작  ==== ");
 

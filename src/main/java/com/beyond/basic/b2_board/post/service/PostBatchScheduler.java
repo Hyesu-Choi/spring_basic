@@ -19,7 +19,7 @@ public class PostBatchScheduler {
         this.job = job;
     }
 
-    @Scheduled(cron = "0 0/1 * * * *")
+    @Scheduled(cron = "0 0 11 * * *")
     public void batchScheduler() {
         try{
             JobParameters jobParameters = new JobParametersBuilder()

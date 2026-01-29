@@ -115,7 +115,7 @@ public class MemberController {
 //    형식 : body부에 name=lungzzi&email=lungzzi@naver.com&profileImage=binary데이터
     @PostMapping("/multipart-formdata")
     @ResponseBody
-//    형식이 rul의 파라미터방식과 동일하므로, RequestParam  또는 데이터 바인딩 가능하다
+//    형식이 url의 파라미터방식과 동일하므로, RequestParam  또는 데이터 바인딩 가능하다
     public String multipartFormData(@ModelAttribute Member member, @RequestParam(value = "profileImage") MultipartFile profileImage) {
         System.out.println(member);
         System.out.println(profileImage.getOriginalFilename());

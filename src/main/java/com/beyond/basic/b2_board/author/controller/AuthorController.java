@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -33,7 +34,10 @@ public class AuthorController {
     //    회원가입
     @PostMapping("/create")
 //    dto에 있는 validation 어노테이션과 @Valid는 한 쌍
-    public ResponseEntity<?> authorCreate(@RequestBody @Valid AuthorCreateDto dto) {
+//    public ResponseEntity<?> authorCreate(@RequestBody @Valid AuthorCreateDto dto) {
+//    public ResponseEntity<?> authorCreate(@Valid AuthorCreateDto dto, @RequestPart(value = "profileImage") MultipartFile profileImage) {
+        public ResponseEntity<?> authorCreate(@RequestPart("author") @Valid AuthorCreateDto dto, @RequestPart("profileImage") MultipartFile profileImage) {
+
 //        아래의 예외처리는 ExceptionHandler에서 전역적으로 예외처리 함.
 //        try{
 //            authorService.save(dto);
@@ -46,7 +50,7 @@ public class AuthorController {
 //        }
 
 //        예외처리 공통 핸들로 만들어서, 성공 응답은 controller에서, 에러 응답은 CommonExceptionHandler에서 처리
-        authorService.save(dto);
+        authorService.save(dto, profileImage);
         return ResponseEntity.status(HttpStatus.CREATED).body("OK");
 
     }
@@ -103,7 +107,7 @@ public class AuthorController {
 //    @AuthenticationPrincipal 객체안에서 principal 꺼낼 수 있음.
     public ResponseEntity<?> myinfo(@AuthenticationPrincipal String principal) {
 //        public ResponseEntity<?> myinfo() {
-        AuthorDetailDto dto = authorService.myInfo(principal);
+        AuthorDetailDto dto = authorService.myinfo(principal);
         return ResponseEntity.status(HttpStatus.OK).body(dto);
 
     }
@@ -118,7 +122,7 @@ public class AuthorController {
     //    비밀번호 수정
     @PatchMapping("/update/password")
     public void updatePw(@RequestBody AuthorUpdatePwDto dto) {
-        authorService.updatePassword(dto);
+        authorService.updatePw(dto);
     }
 
 }
